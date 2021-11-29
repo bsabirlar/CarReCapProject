@@ -1,9 +1,12 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTO_s;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,11 +25,9 @@ namespace Business.Concrete
         public IResult Add(Car car)
         {
 
-            if (car.Description.Length <=2 && car.DailyPrice>0)
-            {
-                return new ErrorResult("Silindi");
-                    
-            }
+            ValidationTool.Validate(new CarValidator(), car);
+            
+
             _carDal.Add(car);
             return new SuccessResult("okumuş musun");
         }
